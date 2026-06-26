@@ -1,0 +1,23 @@
+# --- uv Specific ---
+# Track the lockfile for reproducible builds (recommended for most projects)
+# If building a library/package to publish to PyPI, some prefer ignoring it, 
+# but keeping it is best practice for applications.
+# !uv.lock
+
+# Automatically ignored by uv internal rules, but good to explicitly state
+.venv/
+
+# --- Python Caches & Build Artifacts ---
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+
+.env
+ssl/
+pairing_qr.png
