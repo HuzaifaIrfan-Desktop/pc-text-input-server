@@ -13,7 +13,7 @@ PAIR_TOKEN=os.getenv("PAIR_TOKEN", "")
 
 from pathlib import Path
 
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
 
 app = FastAPI()
@@ -38,6 +38,25 @@ async def cert():
 import hashlib
 import hmac
 import secrets
+
+
+
+import asyncio
+
+
+
+PING_INTERVAL = 30
+
+async def ping_task(websocket: WebSocket):
+    try:
+        while True:
+            await asyncio.sleep(PING_INTERVAL)
+
+            await websocket.send_json({
+                "type": "ping"
+            })
+    except Exception:
+        pass
 
 
 
@@ -87,52 +106,69 @@ async def ws(websocket: WebSocket):
 
     # Process authenticated messages
 
-    while True:
-        message = await websocket.receive_json()
+    # Start heartbeat only after successful authentication
+    ping = asyncio.create_task(ping_task(websocket))
+
+    try:
+
+        while True:
+            message = await websocket.receive_json()
 
 
-        msg_id = message.get("id")
-        msg_type = message.get("type")
+            msg_id = message.get("id")
+            msg_type = message.get("type")
 
-        if msg_type == "text":
-            text = message.get("text", "")
+            if msg_type == "text":
+                text = message.get("text", "")
 
-            print(text)
-
-
-            paste_text(text)
+                print(text)
 
 
-            await websocket.send_json({
-                "id": msg_id,
-                "type": "text",
-                "status": "ok",
-                "text": text,
-            })
+                paste_text(text)
+
+
+                await websocket.send_json({
+                    "id": msg_id,
+                    "type": "text",
+                    "status": "ok",
+                    "text": text,
+                })
 
 
 
-        elif msg_type == "backspace":
+            elif msg_type == "backspace":
 
 
-            print("backspace")
+                print("backspace")
 
 
-            backspace()
+                backspace()
 
 
-            await websocket.send_json({
-                "id": msg_id,
-                "type": "backspace",
-                "status": "ok"
-            })        
+                await websocket.send_json({
+                    "id": msg_id,
+                    "type": "backspace",
+                    "status": "ok"
+                })        
 
 
-        elif msg_type == "ping":
-            await websocket.send_json({
-                "id": msg_id,
-                "type": "pong",
-            })
+            elif msg_type == "ping":
+                await websocket.send_json({
+                    "id": msg_id,
+                    "type": "pong",
+                })
+
+    except WebSocketDisconnect:
+        pass
+
+    finally:
+        ping.cancel()
+
+
+
+
+
+
 
 
 
