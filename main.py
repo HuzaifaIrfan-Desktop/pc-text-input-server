@@ -1,5 +1,7 @@
 
 
+from input import paste_text, backspace
+
 
 import os
 from dotenv import load_dotenv
@@ -35,7 +37,7 @@ import hashlib
 import hmac
 import secrets
 
-from input import paste_text
+
 
 
 @app.websocket("/ws")
@@ -99,15 +101,30 @@ async def ws(websocket: WebSocket):
             paste_text(text)
 
 
-
-
-
             await websocket.send_json({
                 "id": msg_id,
                 "type": "text",
                 "status": "ok",
                 "text": text,
             })
+
+
+
+        elif msg_type == "backspace":
+
+
+            print("backspace")
+
+
+            backspace()
+
+
+            await websocket.send_json({
+                "id": msg_id,
+                "type": "backspace",
+                "status": "ok"
+            })        
+
 
         elif msg_type == "ping":
             await websocket.send_json({
