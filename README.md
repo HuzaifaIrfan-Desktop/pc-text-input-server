@@ -8,12 +8,13 @@ Last Updated on 2026-06-26
 
 
 Secure Python server for receiving authenticated UTF-8 text from the Remote Keyboard app and pasting it into the active application on Windows and Linux.
-<!-- 
+
+https://github.com/HuzaifaIrfan-Mobile/pc-text-input-app
+
+
 ## 🎬 Demo
 
-[▶️![Demo](https://img.youtube.com/vi/23YITX75awo/maxresdefault.jpg)](https://www.youtube.com/watch?v=23YITX75awo)
- -->
-https://github.com/HuzaifaIrfan-Mobile/pc-text-input-app
+[▶️![Demo](https://img.youtube.com/vi/_5MbnwsO890/maxresdefault.jpg)](https://www.youtube.com/watch?v=_5MbnwsO890)
 
 
 
