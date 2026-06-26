@@ -13,6 +13,7 @@ SSL = BASE / "ssl"
 
 ENV_FILE = BASE / ".env"
 QR_FILE = BASE / "pairing_qr.png"
+PAIRING_FILE = BASE / "pairing_json.json"
 CERT_FILE = SSL / "cert.pem"
 
 
@@ -69,25 +70,37 @@ def get_local_ip():
         s.close()
 
 
+from datetime import datetime, timezone
+
+CREATED_ON=datetime.now(timezone.utc).isoformat()
+
 def save_env(host, port, secret_key, pair_token, fingerprint):
     ENV_FILE.write_text(f"""HOST={host}
 PORT={port}
 
+CREATED_ON={CREATED_ON}
 SECRET_KEY={secret_key}
 PAIR_TOKEN={pair_token}
 
 CERT_FINGERPRINT={fingerprint}
+
 """)
 
 
-def create_qr(host, port, pair_token, fingerprint):
+
+def create_json_qr(host, port, pair_token, fingerprint):
     data = {
+        "createdOn": CREATED_ON,
         "version": 1,
         "host": host,
         "port": port,
         "pairToken": pair_token,
         "fingerprint": fingerprint,
     }
+
+
+    with open(PAIRING_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4)   
 
     img = qrcode.make(json.dumps(data, separators=(",", ":")))
     img.save(QR_FILE)
@@ -122,7 +135,7 @@ def main():
         fingerprint,
     )
 
-    create_qr(
+    create_json_qr(
         host,
         PORT,
         pair_token,

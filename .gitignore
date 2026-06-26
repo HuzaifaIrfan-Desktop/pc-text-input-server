@@ -21,3 +21,4 @@ build/
 .env
 ssl/
 pairing_qr.png
+pairing_json.json

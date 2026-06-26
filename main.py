@@ -7,6 +7,8 @@ import uvicorn
 
 load_dotenv()
 
+PAIR_TOKEN=os.getenv("PAIR_TOKEN", "")
+
 from pathlib import Path
 
 from fastapi import FastAPI, WebSocket
@@ -29,23 +31,91 @@ async def cert():
     )
 
 
-@app.websocket("/ws")
-async def websocket_endpoint(ws: WebSocket):
-    await ws.accept()
+import hashlib
+import hmac
+import secrets
 
-    try:
-        while True:
-            text = await ws.receive_text()
+from input import paste_text
+
+
+@app.websocket("/ws")
+async def ws(websocket: WebSocket):
+    await websocket.accept()
+
+    # Generate a random challenge (nonce)
+    nonce = secrets.token_hex(32)
+
+    # Send challenge to the client
+    await websocket.send_json({
+        "type": "challenge",
+        "nonce": nonce,
+    })
+
+    # Receive client's response
+    auth = await websocket.receive_json()
+
+    if auth.get("type") != "auth":
+        await websocket.close(code=1008)
+        return
+
+    # Calculate expected HMAC
+    expected = hmac.new(
+        PAIR_TOKEN.encode(),
+        nonce.encode(),
+        hashlib.sha256,
+    ).hexdigest()
+
+    # Verify response
+    if not hmac.compare_digest(
+        auth.get("response", ""),
+        expected,
+    ):
+        await websocket.send_json({
+            "type": "auth_failed",
+        })
+        await websocket.close(code=1008)
+        return
+
+    # Authentication successful
+    await websocket.send_json({
+        "type": "auth_ok",
+    })
+
+    # Process authenticated messages
+
+    while True:
+        message = await websocket.receive_json()
+
+
+        msg_id = message.get("id")
+        msg_type = message.get("type")
+
+        if msg_type == "text":
+            text = message.get("text", "")
 
             print(text)
 
-            # TODO:
-            # paste into focused application
 
-            await ws.send_text("OK")
+            paste_text(text)
 
-    except Exception:
-        print("Disconnected")
+
+
+
+
+            await websocket.send_json({
+                "id": msg_id,
+                "type": "text",
+                "status": "ok",
+                "text": text,
+            })
+
+        elif msg_type == "ping":
+            await websocket.send_json({
+                "id": msg_id,
+                "type": "pong",
+            })
+
+
 
 
 if __name__ == "__main__":
