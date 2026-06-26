@@ -22,10 +22,12 @@ BASE_DIR = Path(__file__).parent
 
 @app.get("/")
 async def index():
+    print("index.html")
     return FileResponse(BASE_DIR / "index.html")
 
 @app.get("/cert.pem")
 async def cert():
+    print("cert.pem")
     return FileResponse(
         BASE_DIR / "ssl" / "cert.pem",
         media_type="application/x-pem-file",
