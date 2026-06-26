@@ -1,5 +1,7 @@
 
 
+# pyperclip, pynput in __init__.py Works on Linux and windows this not needed
+
 # import platform
 
 # system = platform.system()

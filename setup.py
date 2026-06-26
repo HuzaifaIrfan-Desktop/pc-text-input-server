@@ -1,3 +1,82 @@
+
+
+import ipaddress
+import socket
+from pathlib import Path
+
+from cryptography import x509
+from cryptography.x509.oid import NameOID
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
+from datetime import datetime, timedelta, timezone
+
+
+def get_local_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("1.1.1.1", 80))
+        return s.getsockname()[0]
+    finally:
+        s.close()
+
+
+ip = get_local_ip()
+
+ssl_dir = Path("ssl")
+ssl_dir.mkdir(exist_ok=True)
+
+# Generate private key
+key = rsa.generate_private_key(
+    public_exponent=65537,
+    key_size=2048,
+)
+
+# Certificate subject/issuer
+subject = issuer = x509.Name([
+    x509.NameAttribute(NameOID.COMMON_NAME, ip),
+])
+
+# Subject Alternative Names
+san = x509.SubjectAlternativeName([
+    x509.IPAddress(ipaddress.ip_address(ip)),
+    x509.DNSName("localhost"),
+])
+
+# Build certificate
+cert = (
+    x509.CertificateBuilder()
+    .subject_name(subject)
+    .issuer_name(issuer)
+    .public_key(key.public_key())
+    .serial_number(x509.random_serial_number())
+    .not_valid_before(datetime.now(timezone.utc))
+    .not_valid_after(datetime.now(timezone.utc) + timedelta(days=3650))
+    .add_extension(san, critical=False)
+    .sign(key, hashes.SHA256())
+)
+
+# Save private key
+with open(ssl_dir / "key.pem", "wb") as f:
+    f.write(
+        key.private_bytes(
+            serialization.Encoding.PEM,
+            serialization.PrivateFormat.TraditionalOpenSSL,
+            serialization.NoEncryption(),
+        )
+    )
+
+# Save certificate
+with open(ssl_dir / "cert.pem", "wb") as f:
+    f.write(cert.public_bytes(serialization.Encoding.PEM))
+
+print(f"Generated certificate for {ip}")
+print("Certificate:", ssl_dir / "cert.pem")
+print("Private key:", ssl_dir / "key.pem")
+
+
+
+
+
 import json
 import os
 import platform
@@ -38,25 +117,14 @@ def get_available_port(preferred=PREFERRED_PORT):
         return s.getsockname()[1]
     
 PORT = get_available_port()
+from cryptography import x509
+from cryptography.hazmat.primitives import hashes
 
 def get_fingerprint():
-    fp = subprocess.check_output([
-        "openssl",
-        "x509",
-        "-in",
-        str(CERT_FILE),
-        "-noout",
-        "-fingerprint",
-        "-sha256"
-    ], text=True)
+    with open(CERT_FILE, "rb") as f:
+        cert = x509.load_pem_x509_certificate(f.read())
 
-    return (
-        fp.split("=")[1]
-        .replace(":", "")
-        .strip()
-        .lower()
-    )
-
+    return cert.fingerprint(hashes.SHA256()).hex()
 
 def get_local_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

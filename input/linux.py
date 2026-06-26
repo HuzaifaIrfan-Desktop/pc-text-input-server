@@ -1,6 +1,6 @@
 
 
-
+# pyperclip, pynput in __init__.py Works on Linux this not needed
 
 import shutil
 import subprocess
