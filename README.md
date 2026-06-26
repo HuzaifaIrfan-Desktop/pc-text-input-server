@@ -15,6 +15,10 @@ Secure Python server for receiving authenticated UTF-8 text from the Remote Keyb
  -->
 https://github.com/HuzaifaIrfan-Mobile/pc-text-input-app
 
+
+
+![cover](cover.png)
+
 # 🚀 Usage
 
 ## Setup env, Generate Self Signed SSL certificates and secrets
