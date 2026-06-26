@@ -13,6 +13,8 @@ PAIR_TOKEN=os.getenv("PAIR_TOKEN", "")
 
 from pathlib import Path
 
+from fastapi import FastAPI, Header, Depends, HTTPException
+
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
 
@@ -34,6 +36,37 @@ async def cert():
         filename="cert.pem",
     )
 
+
+
+def authorize(authorization: str = Header(default="")):
+    if authorization != f"Bearer {PAIR_TOKEN}":
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    print("Authorized")
+
+    
+# ---------- API ----------
+
+@app.post("/paste_text")
+async def paste_text_request(
+    data: dict,   # or your PasteRequest model
+    _: None = Depends(authorize),
+):
+    text = data.get("text", "")
+
+    paste_text(text)
+
+    return {"ok": True}
+
+
+@app.post("/backspace")
+async def backspace_request(
+    data: dict,   # or BackspaceRequest
+    _: None = Depends(authorize),
+):
+    count = data.get("count", 1)
+    backspace(count)
+
+    return {"ok": True}
 
 import hashlib
 import hmac

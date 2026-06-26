@@ -18,6 +18,7 @@ dist/
 build/
 *.egg-info/
 
+.vscode/
 .env
 ssl/
 pairing_qr.png
