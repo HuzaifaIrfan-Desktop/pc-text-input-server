@@ -13,6 +13,7 @@ Secure Python server for receiving authenticated UTF-8 text from the Remote Keyb
 
 [▶️![Demo](https://img.youtube.com/vi/23YITX75awo/maxresdefault.jpg)](https://www.youtube.com/watch?v=23YITX75awo)
  -->
+https://github.com/HuzaifaIrfan-Mobile/pc-text-input-app
 
 # 🚀 Usage
 
