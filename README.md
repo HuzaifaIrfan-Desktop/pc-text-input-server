@@ -36,6 +36,22 @@ uv run run.py
 ```
 
 
+## Setup Auto Start
+
+
+## linux systemd 
+
+```sh
+chmod +x auto_start.sh
+./auto_start.sh
+```
+
+## windows
+
+```sh
+
+```
+
 # 📝 Documentation
 
 # 📚 References
