@@ -3,7 +3,7 @@
 v1.0.1
 
 
-Last Updated on 2026-06-26
+Last Updated on 2026-06-27
 <hr />
 
 
@@ -22,13 +22,25 @@ https://github.com/HuzaifaIrfan-Mobile/pc-text-input-app
 
 # 🚀 Usage
 
+## Instal UV Python
+
+https://docs.astral.sh/uv/
+
+## Clone Repo
+```sh
+git clone https://github.com/HuzaifaIrfan-Desktop/pc-text-input-server.git
+```
+
 ## Setup env, Generate Self Signed SSL certificates and secrets
 
 ```sh
 uv run setup.py
 ```
 
-## Run Uvicorn Server
+### For Windows Install and Add OpenSSL in Path
+https://slproweb.com/products/Win32OpenSSL.html
+
+## Manually Run Uvicorn Server
 
 
 ```sh
