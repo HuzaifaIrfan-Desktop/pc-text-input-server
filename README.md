@@ -1,4 +1,4 @@
-# pc-text-input-server
+# PC Text Input Server
 
 v1.0.1
 
@@ -7,14 +7,14 @@ Last Updated on 2026-06-27
 <hr />
 
 
-Secure Python server for receiving authenticated UTF-8 text from the Remote Keyboard app and pasting it into the active application on Windows and Linux.
+Secure Python server for receiving authenticated UTF-8 text Chinese, Japanese, Arabic or Emoji from the Remote Keyboard app and pasting it into the active application on Windows and Linux.
 
 https://github.com/HuzaifaIrfan-Mobile/pc-text-input-app
 
 
 ## 🎬 Demo
 
-[▶️![Demo](https://img.youtube.com/vi/_5MbnwsO890/maxresdefault.jpg)](https://www.youtube.com/watch?v=_5MbnwsO890)
+[▶️![Demo](https://img.youtube.com/vi/rv9DeyLV5Fg/maxresdefault.jpg)](https://www.youtube.com/watch?v=rv9DeyLV5Fg)
 
 
 
