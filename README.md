@@ -36,20 +36,20 @@ uv run run.py
 ```
 
 
-## Setup Auto Start
+## Setup Auto Start on Log in
 
 
-## linux systemd 
+## Linux systemd
 
 ```sh
 chmod +x auto_start.sh
 ./auto_start.sh
 ```
 
-## windows
+## Windows Startup Folder
 
 ```sh
-
+auto_start.bat
 ```
 
 # 📝 Documentation

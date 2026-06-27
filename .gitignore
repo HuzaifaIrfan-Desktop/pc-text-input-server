@@ -24,3 +24,4 @@ build/
 ssl/
 pairing_qr.png
 pairing_json.json
+run_server.cmd
