@@ -40,8 +40,8 @@ uv run setup.py
 ### For Windows Install and Add OpenSSL in Path
 https://slproweb.com/products/Win32OpenSSL.html
 
-## Manually Run Uvicorn Server
-
+## Manually Test and Run Uvicorn Server
+### Install any Dependencies Required
 
 ```sh
 uv run run.py
@@ -51,14 +51,14 @@ uv run run.py
 ## Setup Auto Start on Log in
 
 
-## Linux systemd
+### Linux systemd
 
 ```sh
 chmod +x auto_start.sh
 ./auto_start.sh
 ```
 
-## Windows Startup Folder
+### Windows Startup Folder
 
 ```sh
 auto_start.bat
