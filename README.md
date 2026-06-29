@@ -43,6 +43,13 @@ https://slproweb.com/products/Win32OpenSSL.html
 ## Manually Test and Run Uvicorn Server
 ### Install any Dependencies Required
 
+
+```sh
+chmod +x run.sh
+./run.sh
+```
+
+
 ```sh
 uv run run.py
 ```
