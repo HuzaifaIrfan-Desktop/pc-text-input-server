@@ -1,6 +1,6 @@
 
 print("PC Text Input Server")
-print("v1.0.1")
+print("v1.2.0")
 print("Developed By Huzaifa Irfan")
 
 from input import paste_text, backspace
