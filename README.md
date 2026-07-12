@@ -7,6 +7,9 @@ Last Updated on 2026-06-27
 <hr />
 
 
+
+
+
 Secure Python server for receiving authenticated UTF-8 text Chinese, Japanese, Arabic or Emoji from the Remote Keyboard app and pasting it into the active application on Windows and Linux.
 
 https://github.com/HuzaifaIrfan-Mobile/pc-text-input-app
@@ -72,6 +75,10 @@ auto_start.bat
 ```
 
 # 📝 Documentation
+
+## Printable Zhuyin Keyboard Stickers
+
+[Zhuyin Keyboard Stickers ](zhuyin_keyboard_stickers_landscape_bold.pdf)
 
 # 📚 References
 
